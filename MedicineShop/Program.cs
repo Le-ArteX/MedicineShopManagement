@@ -1,7 +1,23 @@
+//using BLL.Services;
+using BLL.Services;
+using DAL.EF;
+using DAL.EF.Table;
+using DAL.Repos;
+
+//using DAL.Repos;
+using Microsoft.EntityFrameworkCore;
+
+
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<CategoryRepo>();
+builder.Services.AddScoped<CategoryService>();
+builder.Services.AddDbContext<MedicineShopDbContext>(opt => {
+    opt.UseSqlServer(builder.Configuration.GetConnectionString("DbConn"));
+});
 
 var app = builder.Build();
 
@@ -22,7 +38,7 @@ app.MapStaticAssets();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}")
+    pattern: "{controller=Category}/{action=Index}/{id?}")
     .WithStaticAssets();
 
 
