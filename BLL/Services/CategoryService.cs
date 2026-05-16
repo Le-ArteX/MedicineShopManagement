@@ -7,12 +7,11 @@ namespace BLL.Services
     public class CategoryService
     {
         private readonly CategoryRepo categoryRepo;
-        private Mapper mapper; // Removed 'readonly' so it can be assigned manually
+        private Mapper mapper; 
 
         public CategoryService(CategoryRepo categoryRepo)
         {
             this.categoryRepo = categoryRepo;
-            // Now this will work using the updated MapperConfig!
             this.mapper = MapperConfig.GetMapper();
         }
     

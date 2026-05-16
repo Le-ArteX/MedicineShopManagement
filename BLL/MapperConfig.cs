@@ -1,21 +1,27 @@
-﻿using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿#nullable disable
+using AutoMapper;
+using BLL.DTOs;
+using DAL.EF.Table;
 
 namespace BLL
 {
     public class MapperConfig
     {
-        static MapperConfiguration config = new MapperConfiguration(cfg =>
+        public static MapperConfiguration RegisterMaps()
         {
-            cfg.CreateMap<Category, CategoryDTO>().ReverseMap();
-        });
+            var mappingConfig = new MapperConfiguration(config =>
+            {
+                config.CreateMap<Category, CategoryDTO>().ReverseMap(); ;
+
+            });
+
+            return mappingConfig;
+        }
 
         public static Mapper GetMapper()
         {
+            var config = RegisterMaps();
             return new Mapper(config);
         }
-
     }
 }
