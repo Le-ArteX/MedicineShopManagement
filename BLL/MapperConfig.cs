@@ -14,6 +14,7 @@ namespace BLL
                 config.CreateMap<Category, CategoryDTO>().ReverseMap();
                 config.CreateMap<Customer, CustomerDTO>().ReverseMap();
                 config.CreateMap<Medicine, MedicineDTO>().ReverseMap();
+                config.CreateMap<Supplier, SupplierDTO>().ReverseMap();
 
             });
 

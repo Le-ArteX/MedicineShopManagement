@@ -19,6 +19,8 @@ builder.Services.AddScoped<CustomerRepo>();
 builder.Services.AddScoped<CustomerService>();
 builder.Services.AddScoped<MedicineRepo>();
 builder.Services.AddScoped<MedicineService>();
+builder.Services.AddScoped<SupplierRepo>();
+builder.Services.AddScoped<SupplierService>();
 builder.Services.AddDbContext<MedicineShopDbContext>(opt => {
     opt.UseSqlServer(builder.Configuration.GetConnectionString("DbConn"));
 });

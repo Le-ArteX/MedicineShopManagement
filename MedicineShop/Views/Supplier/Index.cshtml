@@ -1,0 +1,58 @@
+﻿@using System.Linq
+@model List<BLL.DTOs.SupplierDTO>
+
+@{
+    ViewData["Title"] = "Supplier List";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0 text-primary">Supplier List</h2>
+        <a asp-action="create" class="btn btn-primary shadow-sm">
+            <i class="bi bi-plus-circle"></i> Add New Supplier
+        </a>
+    </div>
+
+    <div class="table-responsive shadow-sm rounded bg-white">
+        <table class="table table-bordered table-striped table-hover mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th class="ps-3">ID</th>
+                    <th>Company Name</th>
+                    <th>Contact Person</th>
+                    <th>Phone</th>
+                    <th>Email</th>
+                    <th class="text-center" style="width: 220px;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="align-middle ps-3 text-muted">@item.SupplierId</td>
+                            <td class="align-middle fw-bold">@item.Name</td>
+                            <td class="align-middle">@item.ContactPerson</td>
+                            <td class="align-middle">@item.Phone</td>
+                            <td class="align-middle">@item.Email</td>
+                            <td class="text-center align-middle">
+                                <a asp-action="update" asp-route-id="@item.SupplierId" class="btn btn-sm btn-outline-warning">Edit</a>
+                                <a asp-action="details" asp-route-id="@item.SupplierId" class="btn btn-sm btn-outline-info">Details</a>
+                                <a asp-action="delete" asp-route-id="@item.SupplierId" class="btn btn-sm btn-outline-danger">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="6" class="text-center text-muted py-4">
+                            No suppliers found. Click "Add New Supplier" to create one.
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
