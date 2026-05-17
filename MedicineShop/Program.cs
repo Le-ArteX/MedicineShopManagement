@@ -15,6 +15,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<CategoryRepo>();
 builder.Services.AddScoped<CategoryService>();
+builder.Services.AddScoped<CustomerRepo>();
+builder.Services.AddScoped<CustomerService>();
+builder.Services.AddScoped<MedicineRepo>();
+builder.Services.AddScoped<MedicineService>();
 builder.Services.AddDbContext<MedicineShopDbContext>(opt => {
     opt.UseSqlServer(builder.Configuration.GetConnectionString("DbConn"));
 });

@@ -1,0 +1,63 @@
+﻿@using System.Linq
+@model List<BLL.DTOs.CustomerDTO>
+
+@{
+    ViewData["Title"] = "Customer List";
+}
+
+<div class="container mt-4">
+
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0 text-primary">Customer List</h2>
+        <a asp-action="create" class="btn btn-primary shadow-sm">
+            <i class="bi bi-plus-circle"></i> +Create New Customer
+        </a>
+    </div>
+
+    <div class="table-responsive shadow-sm rounded bg-white">
+        <table class="table table-bordered table-striped table-hover mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th class="ps-3">ID</th>
+                    <th>Name</th>
+                    <th>Phone</th>
+                    <th>Email</th>
+                    <th>Address</th>
+                    <th class="text-center" style="width: 220px;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="align-middle ps-3 text-muted">@item.CustomerId</td>
+                            <td class="align-middle fw-bold">@item.Name</td>
+                            <td class="align-middle">@item.Phone</td>
+                            <td class="align-middle">@item.Email</td>
+                            <td class="align-middle text-truncate" style="max-width: 200px;">@item.Address</td>
+                            
+                            <td class="text-center align-middle">
+                                <a asp-action="update" asp-route-id="@item.CustomerId" class="btn btn-sm btn-outline-warning">Edit</a>
+                                <a asp-action="details" asp-route-id="@item.CustomerId" class="btn btn-sm btn-outline-info">Details</a>
+                                <a asp-action="delete" asp-route-id="@item.CustomerId" class="btn btn-sm btn-outline-danger">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="6" class="text-center text-muted py-4">
+                            No customers found. Click the "Create New Customer" button to get started!
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+</div>
+

@@ -11,7 +11,9 @@ namespace BLL
         {
             var mappingConfig = new MapperConfiguration(config =>
             {
-                config.CreateMap<Category, CategoryDTO>().ReverseMap(); ;
+                config.CreateMap<Category, CategoryDTO>().ReverseMap();
+                config.CreateMap<Customer, CustomerDTO>().ReverseMap();
+                config.CreateMap<Medicine, MedicineDTO>().ReverseMap();
 
             });
 

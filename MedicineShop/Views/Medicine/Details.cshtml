@@ -1,0 +1,82 @@
+﻿@model BLL.DTOs.MedicineDTO
+@{
+    ViewData["Title"] = "Medicine Details";
+}
+
+<div class="container mt-4 mb-5">
+    <h2><i class="bi bi-info-circle text-info"></i> Medicine Details</h2>
+    <hr />
+
+    <div class="card shadow-sm col-md-8 mx-auto border-0">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">@Model.Name</h4>
+            <span class="badge bg-light text-primary fs-6">ID: #@Model.MedicineId</span>
+        </div>
+        
+        <div class="card-body bg-light">
+            <div class="row">
+                <!-- Left Column -->
+                <div class="col-md-6 border-end">
+                    <h5 class="text-muted border-bottom pb-2 mb-3">Product Info</h5>
+                    
+                    <dl class="row">
+                        <dt class="col-sm-5 text-muted">Generic Name</dt>
+                        <dd class="col-sm-7 fw-bold">@Model.GenericName</dd>
+
+                        <dt class="col-sm-5 text-muted">Brand</dt>
+                        <dd class="col-sm-7">@Model.Brand</dd>
+
+                        <dt class="col-sm-5 text-muted">Category ID</dt>
+                        <dd class="col-sm-7">@Model.CategoryId</dd>
+
+                        <dt class="col-sm-5 text-muted">Supplier ID</dt>
+                        <dd class="col-sm-7">@Model.SupplierId</dd>
+                    </dl>
+                </div>
+
+                <!-- Right Column -->
+                <div class="col-md-6 ps-4">
+                    <h5 class="text-muted border-bottom pb-2 mb-3">Inventory Status</h5>
+                    
+                    <dl class="row">
+                        <dt class="col-sm-6 text-muted">Unit Price</dt>
+                        <dd class="col-sm-6 text-success fw-bold fs-5">@Model.UnitPrice.ToString("C")</dd>
+
+                        <dt class="col-sm-6 text-muted">Current Stock</dt>
+                        <dd class="col-sm-6 fw-bold @((Model.StockQuantity <= Model.MinStockLevel) ? "text-danger" : "text-primary")">
+                            @Model.StockQuantity units
+                        </dd>
+
+                        <dt class="col-sm-6 text-muted">Min Alert Level</dt>
+                        <dd class="col-sm-6">@Model.MinStockLevel</dd>
+
+                        <dt class="col-sm-6 text-muted">Expiry Date</dt>
+                        <dd class="col-sm-6 @((Model.ExpiryDate <= DateOnly.FromDateTime(DateTime.Now.AddDays(30))) ? "text-danger fw-bold" : "")">
+                            @Model.ExpiryDate.ToString("MMMM dd, yyyy")
+                        </dd>
+                    </dl>
+
+                    <!-- Alert Badge if Stock is Low -->
+                    @if (Model.StockQuantity <= Model.MinStockLevel)
+                    {
+                        <div class="alert alert-danger py-2 mt-3 mb-0 text-center" role="alert">
+                            <i class="bi bi-exclamation-circle-fill"></i> Low Stock Warning!
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Actions -->
+        <div class="card-footer text-end bg-white">
+            <a asp-action="update" asp-route-id="@Model.MedicineId" class="btn btn-warning px-4 text-dark fw-bold">
+                <i class="bi bi-pencil-square"></i> Edit Tracker
+            </a>
+            <a asp-action="Index" class="btn btn-secondary ms-2 px-4">Back to List</a>
+        </div>
+    </div>
+</div>@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
