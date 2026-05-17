@@ -4,36 +4,36 @@ using BLL.Services;
 
 namespace MedicineShop.Controllers
 {
-    public class PurchaseController : Controller
+    public class PurchaseItemController : Controller
     {
-        private readonly PurchaseService _purchaseService;
+        private readonly PurchaseItemService _purchaseItemService;
 
-        public PurchaseController(PurchaseService purchaseService)
+        public PurchaseItemController(PurchaseItemService purchaseItemService)
         {
-            _purchaseService = purchaseService;
+            _purchaseItemService = purchaseItemService;
         }
 
         public IActionResult Index()
         {
-            var data = _purchaseService.Get();
+            var data = _purchaseItemService.Get();
             return View(data);
         }
 
         [HttpGet]
         public IActionResult create()
         {
-            return View(new PurchaseDTO());
+            return View(new PurchaseItemDTO());
         }
 
         [HttpPost]
-        public IActionResult create(PurchaseDTO p)
+        public IActionResult create(PurchaseItemDTO p)
         {
             if (ModelState.IsValid)
             {
-                var res = _purchaseService.Create(p);
+                var res = _purchaseItemService.Create(p);
                 if (res)
                 {
-                    TempData["SuccessMessage"] = "Purchase added successfully!";
+                    TempData["SuccessMessage"] = "Purchase Item added successfully!";
                     return RedirectToAction("Index");
                 }
             }
@@ -43,23 +43,23 @@ namespace MedicineShop.Controllers
         [HttpGet]
         public IActionResult update(int id)
         {
-            var purchase = _purchaseService.Get(id);
-            if (purchase == null)
+            var purchaseItem = _purchaseItemService.Get(id);
+            if (purchaseItem == null)
             {
                 return NotFound();
             }
-            return View(purchase);
+            return View(purchaseItem);
         }
 
         [HttpPost]
-        public IActionResult update(PurchaseDTO p)
+        public IActionResult update(PurchaseItemDTO p)
         {
             if (ModelState.IsValid)
             {
-                var res = _purchaseService.Update(p);
+                var res = _purchaseItemService.Update(p);
                 if (res)
                 {
-                    TempData["SuccessMessage"] = "Purchase updated successfully!";
+                    TempData["SuccessMessage"] = "Purchase Item updated successfully!";
                     return RedirectToAction("Index");
                 }
             }
@@ -69,33 +69,33 @@ namespace MedicineShop.Controllers
         [HttpGet]
         public IActionResult details(int id)
         {
-            var purchase = _purchaseService.Get(id);
-            if (purchase == null)
+            var purchaseItem = _purchaseItemService.Get(id);
+            if (purchaseItem == null)
             {
                 return NotFound();
             }
-            return View(purchase);
+            return View(purchaseItem);
         }
 
         [HttpGet]
         public IActionResult delete(int id)
         {
-            var purchase = _purchaseService.Get(id);
-            if (purchase == null)
+            var purchaseItem = _purchaseItemService.Get(id);
+            if (purchaseItem == null)
             {
                 return NotFound();
             }
-            return View(purchase);
+            return View(purchaseItem);
         }
 
         [HttpPost]
         [ActionName("delete")]
-        public IActionResult confirmDelete(int PurchaseId)
+        public IActionResult confirmDelete(int PurchaseItemId)
         {
-            var res = _purchaseService.Delete(PurchaseId);
+            var res = _purchaseItemService.Delete(PurchaseItemId);
             if (res)
             {
-                TempData["SuccessMessage"] = "Purchase deleted permanently!";
+                TempData["SuccessMessage"] = "Purchase Item deleted permanently!";
                 return RedirectToAction("Index");
             }
             return RedirectToAction("Index");

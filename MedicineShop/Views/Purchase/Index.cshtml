@@ -1,0 +1,68 @@
+﻿@model IEnumerable<BLL.DTOs.PurchaseDTO>
+
+@{
+    ViewData["Title"] = "Purchases";
+}
+
+<div class="container mt-4 mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2><i class="bi bi-cart"></i> Purchases Management</h2>
+        <a asp-action="create" class="btn btn-primary"><i class="bi bi-plus-lg"></i> Add New Purchase</a>
+    </div>
+    <hr />
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i> @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="card shadow-sm">
+        <div class="card-body p-0">
+            <table class="table table-hover table-striped mb-0">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Date</th>
+                        <th>Invoice No</th>
+                        <th>Total Amount</th>
+                        <th>Supplier ID</th>
+                        <th class="text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="align-middle">@item.PurchaseDate.ToString("dd-MMM-yyyy")</td>
+                                <td class="align-middle fw-bold">@item.InvoiceNo</td>
+                                <td class="align-middle text-success fw-bold">৳@item.TotalAmount.ToString("N2")</td>
+                                <td class="align-middle">@item.SupplierId</td>
+                                <td class="align-middle text-center">
+                                    <a asp-action="details" asp-route-id="@item.PurchaseId" class="btn btn-sm btn-info text-white" title="Details">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <a asp-action="update" asp-route-id="@item.PurchaseId" class="btn btn-sm btn-warning text-dark" title="Edit">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <a asp-action="delete" asp-route-id="@item.PurchaseId" class="btn btn-sm btn-danger text-white" title="Delete">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="5" class="text-center text-muted py-4">No purchases found.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

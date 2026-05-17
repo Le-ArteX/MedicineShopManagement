@@ -15,6 +15,10 @@ namespace BLL
                 config.CreateMap<Customer, CustomerDTO>().ReverseMap();
                 config.CreateMap<Medicine, MedicineDTO>().ReverseMap();
                 config.CreateMap<Supplier, SupplierDTO>().ReverseMap();
+                config.CreateMap<Purchase, PurchaseDTO>().ReverseMap();
+                config.CreateMap<Sale, SaleDTO>().ReverseMap();
+                config.CreateMap<PurchaseItem, PurchaseItemDTO>().ReverseMap();
+                config.CreateMap<Report, ReportDTO>().ReverseMap();
 
             });
 
@@ -26,5 +30,9 @@ namespace BLL
             var config = RegisterMaps();
             return new Mapper(config);
         }
+    }
+
+    internal class Report
+    {
     }
 }

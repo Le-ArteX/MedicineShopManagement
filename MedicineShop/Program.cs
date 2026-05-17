@@ -21,6 +21,15 @@ builder.Services.AddScoped<MedicineRepo>();
 builder.Services.AddScoped<MedicineService>();
 builder.Services.AddScoped<SupplierRepo>();
 builder.Services.AddScoped<SupplierService>();
+builder.Services.AddScoped<PurchaseRepo>();
+builder.Services.AddScoped<PurchaseService>();
+builder.Services.AddScoped<SaleRepo>();
+builder.Services.AddScoped<SaleService>();
+builder.Services.AddScoped<PurchaseItemRepo>();
+builder.Services.AddScoped<PurchaseItemService>();
+builder.Services.AddScoped<ReportRepo>();
+builder.Services.AddScoped<ReportService>();
+
 builder.Services.AddDbContext<MedicineShopDbContext>(opt => {
     opt.UseSqlServer(builder.Configuration.GetConnectionString("DbConn"));
 });
