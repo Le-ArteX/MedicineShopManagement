@@ -32,6 +32,11 @@ namespace DAL.Repos
             return db.Customers.ToList();
         }
 
+        public bool EmailExists(string email, int excludeCustomerId = 0)
+        {
+            return db.Customers.Any(c => c.Email == email && c.CustomerId != excludeCustomerId);
+        }
+
 
         public bool Update(Customer c)
         {

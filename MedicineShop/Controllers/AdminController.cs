@@ -30,7 +30,7 @@ namespace MedicineShop.Controllers
             return View(dashboardDto);
         }
 
-        public IActionResult Staff()
+        public IActionResult Staff(int page = 1)
         {
             if (!IsAdmin)
             {
@@ -38,13 +38,25 @@ namespace MedicineShop.Controllers
             }
 
             var staffUsers = _userRepo.GetByRole("Staff");
-            return View(staffUsers.Select(u => new UserDTO
+            var staffDtos = staffUsers.Select(u => new UserDTO
             {
                 UserId = u.UserId,
                 Name = u.Name,
                 Email = u.Email,
                 Role = u.Role
-            }).ToList());
+            }).ToList();
+
+            const int pageSize = 15;
+            var totalCount = staffDtos.Count;
+            var totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
+            page = Math.Max(1, Math.Min(page, totalPages == 0 ? 1 : totalPages));
+            var pagedData = staffDtos.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = totalPages;
+            ViewBag.PageSize = pageSize;
+
+            return View(pagedData);
         }
 
         [HttpGet]

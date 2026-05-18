@@ -40,6 +40,7 @@
                             <li class="nav-item"><a class="nav-link @Active("Admin", "Staff")" asp-controller="Admin" asp-action="Staff">Staff</a></li>
                             <li class="nav-item"><a class="nav-link @Active("Report")" asp-controller="Report" asp-action="Index">Reports</a></li>
                             <li class="nav-item"><a class="nav-link @Active("Alert")" asp-controller="Alert" asp-action="Index">Alerts</a></li>
+                            <li class="nav-item"><a class="nav-link @Active("Settings")" asp-controller="Settings" asp-action="Index">Settings</a></li>
                         }
                         else if (role == "Staff")
                         {
@@ -48,6 +49,7 @@
                             <li class="nav-item"><a class="nav-link @Active("Sale", "Index")" asp-controller="Sale" asp-action="Index">Invoice</a></li>
                             <li class="nav-item"><a class="nav-link @Active("Customer")" asp-controller="Customer" asp-action="Index">Customer</a></li>
                             <li class="nav-item"><a class="nav-link @Active("Alert")" asp-controller="Alert" asp-action="Index">Alerts</a></li>
+                            <li class="nav-item"><a class="nav-link @Active("Settings")" asp-controller="Settings" asp-action="Index">Settings</a></li>
                         }
                     </ul>
 

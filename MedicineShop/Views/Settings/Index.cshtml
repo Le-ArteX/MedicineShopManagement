@@ -1,0 +1,110 @@
+@model BLL.DTOs.SettingsDTO
+
+@{
+    ViewData["Title"] = "Settings";
+}
+
+<style>
+    .settings-card {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    }
+    .settings-icon {
+        width: 44px;
+        height: 44px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 12px;
+        background: rgba(13, 110, 253, 0.1);
+        color: #0d6efd;
+        font-weight: 700;
+    }
+</style>
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card settings-card border-0">
+                <div class="card-body p-4 p-lg-5">
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <div class="settings-icon">S</div>
+                        <div>
+                            <h2 class="mb-1">Settings</h2>
+                            <p class="text-muted mb-0">Manage your account settings here.</p>
+                        </div>
+
+                    </div>
+
+                    <hr class="my-4" />
+
+                    <form asp-action="Index" method="post">
+                        @if (ViewBag.Success != null)
+                        {
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                @ViewBag.Success
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        }
+
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                        <div class="row g-3" id="settingsFields">
+                            <div class="col-md-6">
+                                <label asp-for="Name" class="form-label">Name</label>
+                                <input asp-for="Name" class="form-control" disabled />
+                                <span asp-validation-for="Name" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="Email" class="form-label">Email</label>
+                                <input asp-for="Email" class="form-control" disabled />
+                                <span asp-validation-for="Email" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="InterestedOn" class="form-label">Interested On</label>
+                                <input asp-for="InterestedOn" class="form-control" disabled />
+                                <span asp-validation-for="InterestedOn" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="NewPassword" class="form-label">New Password</label>
+                                <input asp-for="NewPassword" type="password" class="form-control" placeholder="Leave blank to keep current" disabled />
+                                <span asp-validation-for="NewPassword" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="ConfirmPassword" class="form-label">Confirm Password</label>
+                                <input asp-for="ConfirmPassword" type="password" class="form-control" placeholder="Confirm new password" disabled />
+                                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="d-grid d-md-flex justify-content-md-end mt-4 gap-2">
+                            <button type="button" class="btn btn-outline-primary px-4" id="editButton">Edit</button>
+                            <button type="submit" class="btn btn-primary px-4" id="saveButton" disabled>Save Changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        const editButton = document.getElementById("editButton");
+        const saveButton = document.getElementById("saveButton");
+        const settingsFields = document.getElementById("settingsFields");
+
+        editButton?.addEventListener("click", () => {
+            settingsFields?.querySelectorAll("input").forEach(input => {
+                input.removeAttribute("disabled");
+            });
+            saveButton?.removeAttribute("disabled");
+            editButton.setAttribute("disabled", "disabled");
+            editButton.textContent = "Editing";
+        });
+    </script>
+}

@@ -15,7 +15,7 @@
         
         <div class="card-body bg-light">
             <div class="row">
-                <!-- Left Column -->
+         
                 <div class="col-md-6 border-end">
                     <h5 class="text-muted border-bottom pb-2 mb-3">Product Info</h5>
                     
@@ -34,7 +34,7 @@
                     </dl>
                 </div>
 
-                <!-- Right Column -->
+       
                 <div class="col-md-6 ps-4">
                     <h5 class="text-muted border-bottom pb-2 mb-3">Inventory Status</h5>
                     
@@ -56,7 +56,6 @@
                         </dd>
                     </dl>
 
-                    <!-- Alert Badge if Stock is Low -->
                     @if (Model.StockQuantity <= Model.MinStockLevel)
                     {
                         <div class="alert alert-danger py-2 mt-3 mb-0 text-center" role="alert">

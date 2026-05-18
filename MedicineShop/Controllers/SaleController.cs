@@ -14,7 +14,7 @@ namespace MedicineShop.Controllers
             _saleService = saleService;
         }
 
-        public IActionResult Index(string q)
+        public IActionResult Index(string q, int page = 1)
         {
             if (!IsLoggedIn)
             {
@@ -33,8 +33,17 @@ namespace MedicineShop.Controllers
                     item.Discount.ToString().Contains(q, System.StringComparison.OrdinalIgnoreCase)).ToList();
             }
 
+            const int pageSize = 15;
+            var totalCount = data.Count;
+            var totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
+            page = Math.Max(1, Math.Min(page, totalPages == 0 ? 1 : totalPages));
+            var pagedData = data.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
             ViewData["SearchQuery"] = q;
-            return View(data);
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = totalPages;
+            ViewBag.PageSize = pageSize;
+            return View(pagedData);
         }
 
         [HttpGet]

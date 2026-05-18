@@ -20,7 +20,11 @@ namespace BLL.Services
 
             public bool Create(DTOs.CustomerDTO c)
             {
-                var customer = mapper.Map<DAL.EF.Table.Customer>(c);
+              if(customerRepo.EmailExists(c.Email))
+            {
+                return false;
+            }
+            var customer = mapper.Map<DAL.EF.Table.Customer>(c);
                 return customerRepo.Create(customer);
             }
 

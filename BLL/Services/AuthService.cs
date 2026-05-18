@@ -1,6 +1,7 @@
 ﻿using BLL.DTOs;
 using DAL.EF.Table;
 using DAL.Repos;
+using System;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -73,6 +74,33 @@ namespace BLL.Services
         public User GetUserByEmail(string email)
         {
             return _userRepo.GetByEmail(email);
+        }
+
+        public string UpdateProfile(string currentEmail, SettingsDTO dto)
+        {
+            var user = _userRepo.GetByEmail(currentEmail);
+            if (user == null)
+            {
+                return "User not found.";
+            }
+
+            if (!string.Equals(currentEmail, dto.Email, StringComparison.OrdinalIgnoreCase)
+                && _userRepo.EmailExists(dto.Email))
+            {
+                return "This email is already registered.";
+            }
+
+            user.Name = dto.Name;
+            user.Email = dto.Email;
+            user.InterestedOn = dto.InterestedOn;
+
+            if (!string.IsNullOrWhiteSpace(dto.NewPassword))
+            {
+                user.Password = HashPassword(dto.NewPassword);
+            }
+
+            var updated = _userRepo.Update(user);
+            return updated ? "Success" : "Failed to update profile. Please try again.";
         }
 
         private static string HashPassword(string password)
