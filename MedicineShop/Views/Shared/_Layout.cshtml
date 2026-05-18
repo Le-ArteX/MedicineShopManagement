@@ -21,7 +21,19 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid px-3 px-lg-4">
-                <a class="navbar-brand fw-bold text-primary" asp-controller="Home" asp-action="Index">MedicineShop</a>
+                @if (role == "Admin")
+                {
+                    <a class="navbar-brand fw-bold text-primary" asp-controller="Admin" asp-action="Index">MedicineShop</a>
+                }
+                else if (role == "Staff")
+                {
+                    <a class="navbar-brand fw-bold text-primary" asp-controller="Staff" asp-action="Index">MedicineShop</a>
+                }
+                else
+                {
+                    <a class="navbar-brand fw-bold text-primary" asp-controller="Home" asp-action="Index">MedicineShop</a>
+                    }
+               
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
