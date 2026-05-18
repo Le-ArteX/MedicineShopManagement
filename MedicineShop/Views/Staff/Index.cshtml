@@ -1,0 +1,16 @@
+@{
+    ViewData["Title"] = "Staff Dashboard";
+    Layout = "_Layout";
+}
+
+<div class="container py-4">
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-primary text-white fw-bold">
+            Staff Dashboard
+        </div>
+        <div class="card-body">
+            <h4 class="mb-3">Welcome, @Context.Session.GetString("Uname")</h4>
+            <p class="mb-0">You are signed in as staff.</p>
+        </div>
+    </div>
+</div>

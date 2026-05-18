@@ -11,7 +11,7 @@
     </div>
     <hr />
 
-    @if (TempData["SuccessMessage"] != null)
+    @if (TempData["SuccessMessage"] != null && TempData["SuccessMessage"].ToString().Contains("Purchase"))
     {
         <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
             <i class="bi bi-check-circle-fill me-2"></i> @TempData["SuccessMessage"]

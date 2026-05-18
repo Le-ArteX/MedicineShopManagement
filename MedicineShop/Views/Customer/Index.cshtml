@@ -1,18 +1,34 @@
 ﻿@using System.Linq
+@using Microsoft.AspNetCore.Http
 @model List<BLL.DTOs.CustomerDTO>
 
 @{
     ViewData["Title"] = "Customer List";
+    var searchQuery = ViewData["SearchQuery"]?.ToString();
 }
 
 <div class="container mt-4">
-
-
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="mb-0 text-primary">Customer List</h2>
-        <a asp-action="create" class="btn btn-primary shadow-sm">
-            <i class="bi bi-plus-circle"></i> +Create New Customer
-        </a>
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+        <div>
+            <h2 class="mb-0 text-primary">Customer List</h2>
+            @if (!string.IsNullOrWhiteSpace(searchQuery))
+            {
+                <div class="text-muted small mt-1">Showing results for "<strong>@searchQuery</strong>"</div>
+            }
+        </div>
+        <div class="d-flex flex-wrap gap-2 align-items-center">
+            <form class="d-flex gap-2" method="get" asp-action="Index" role="search">
+                <input class="form-control" type="search" name="q" value="@searchQuery" placeholder="Search customers" aria-label="Search customers" />
+                <button class="btn btn-outline-primary" type="submit">Search</button>
+                @if (!string.IsNullOrWhiteSpace(searchQuery))
+                {
+                    <a class="btn btn-outline-secondary" asp-action="Index">Clear</a>
+                }
+            </form>
+            <a asp-action="create" class="btn btn-primary shadow-sm">
+                <i class="bi bi-plus-circle"></i> +Create New Customer
+            </a>
+        </div>
     </div>
 
     <div class="table-responsive shadow-sm rounded bg-white">

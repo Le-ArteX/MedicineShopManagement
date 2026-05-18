@@ -1,0 +1,39 @@
+@model BLL.DTOs.UserDTO
+
+@{
+    ViewData["Title"] = "Delete Staff";
+}
+
+<div class="container mt-4 mb-5">
+    <h2><i class="bi bi-trash text-danger"></i> Delete Staff</h2>
+    <hr />
+
+    <div class="alert alert-warning col-md-8 mx-auto shadow-sm">
+        <strong>Warning:</strong> This will permanently remove the staff login account.
+    </div>
+
+    <div class="card shadow-sm col-md-8 mx-auto border-0">
+        <div class="card-body bg-light">
+            <dl class="row mb-0">
+                <dt class="col-sm-4 text-muted">User ID</dt>
+                <dd class="col-sm-8">#@Model.UserId</dd>
+
+                <dt class="col-sm-4 text-muted">Name</dt>
+                <dd class="col-sm-8 fw-bold">@Model.Name</dd>
+
+                <dt class="col-sm-4 text-muted">Email</dt>
+                <dd class="col-sm-8">@Model.Email</dd>
+
+                <dt class="col-sm-4 text-muted">Role</dt>
+                <dd class="col-sm-8"><span class="badge bg-secondary">@Model.Role</span></dd>
+            </dl>
+        </div>
+        <div class="card-footer bg-white text-end">
+            <form asp-action="DeleteStaff" method="post" class="d-inline">
+                <input type="hidden" name="UserId" value="@Model.UserId" />
+                <a asp-action="Staff" class="btn btn-secondary me-2">Cancel</a>
+                <button type="submit" class="btn btn-danger px-4">Delete Staff</button>
+            </form>
+        </div>
+    </div>
+</div>

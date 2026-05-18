@@ -37,6 +37,12 @@ namespace BLL.Services
             return _mapper.Map<SaleDTO>(data);
         }
 
+        public SaleDTO GetByInvoiceNo(string invoiceNo)
+        {
+            var data = _saleRepo.GetByInvoiceNo(invoiceNo);
+            return _mapper.Map<SaleDTO>(data);
+        }
+
         public bool Update(SaleDTO obj)
         {
             var data = _mapper.Map<Sale>(obj);

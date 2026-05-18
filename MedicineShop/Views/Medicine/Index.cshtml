@@ -1,15 +1,38 @@
 ﻿@using System.Linq
+@using Microsoft.AspNetCore.Http
 @model List<BLL.DTOs.MedicineDTO>
 @{
     ViewData["Title"] = "Medicine Inventory";
+    var role = Context.Session.GetString("Urole");
+    var isAdmin = role == "Admin";
+    var searchQuery = ViewData["SearchQuery"]?.ToString();
 }
 
 <div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="mb-0 text-primary">Medicine Inventory</h2>
-        <a asp-action="create" class="btn btn-primary shadow-sm">
-            <i class="bi bi-plus-circle"></i> Add New Medicine
-        </a>
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+        <div>
+            <h2 class="mb-0 text-primary">Medicine Inventory</h2>
+            @if (!string.IsNullOrWhiteSpace(searchQuery))
+            {
+                <div class="text-muted small mt-1">Showing results for "<strong>@searchQuery</strong>"</div>
+            }
+        </div>
+        <div class="d-flex flex-wrap gap-2 align-items-center">
+            <form class="d-flex gap-2" method="get" asp-action="Index" role="search">
+                <input class="form-control" type="search" name="q" value="@searchQuery" placeholder="Search medicines" aria-label="Search medicines" />
+                <button class="btn btn-outline-primary" type="submit">Search</button>
+                @if (!string.IsNullOrWhiteSpace(searchQuery))
+                {
+                    <a class="btn btn-outline-secondary" asp-action="Index">Clear</a>
+                }
+            </form>
+            @if (isAdmin)
+            {
+                <a asp-action="create" class="btn btn-primary shadow-sm">
+                    <i class="bi bi-plus-circle"></i> Add New Medicine
+                </a>
+            }
+        </div>
     </div>
 
     <div class="table-responsive shadow-sm rounded bg-white">
@@ -37,19 +60,22 @@
                             <td class="align-middle">@item.GenericName</td>
                             <td class="align-middle">@item.Brand</td>
                             <td class="align-middle text-success fw-bold text-end">@item.UnitPrice.ToString("C")</td>
-                            
+
                             <td class="align-middle text-center fw-bold @((item.StockQuantity <= item.MinStockLevel) ? "text-danger" : "")">
                                 @item.StockQuantity
                             </td>
- 
+
                             <td class="align-middle text-center @((item.ExpiryDate <= DateOnly.FromDateTime(DateTime.Now.AddDays(30))) ? "text-danger fw-bold" : "")">
                                 @item.ExpiryDate.ToString("yyyy-MM-dd")
                             </td>
-                            
+
                             <td class="text-center align-middle">
-                                <a asp-action="update" asp-route-id="@item.MedicineId" class="btn btn-sm btn-outline-warning">Edit</a>
                                 <a asp-action="details" asp-route-id="@item.MedicineId" class="btn btn-sm btn-outline-info">Details</a>
-                                <a asp-action="delete" asp-route-id="@item.MedicineId" class="btn btn-sm btn-outline-danger">Del</a>
+                                @if (isAdmin)
+                                {
+                                    <a asp-action="update" asp-route-id="@item.MedicineId" class="btn btn-sm btn-outline-warning">Edit</a>
+                                    <a asp-action="delete" asp-route-id="@item.MedicineId" class="btn btn-sm btn-outline-danger">Del</a>
+                                }
                             </td>
                         </tr>
                     }

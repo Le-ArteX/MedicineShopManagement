@@ -1,16 +1,38 @@
-﻿@model List<BLL.DTOs.CategoryDTO>
+﻿@using Microsoft.AspNetCore.Http
+@model List<BLL.DTOs.CategoryDTO>
 
 @{
     ViewData["Title"] = "Category List";
+    var isAdmin = Context.Session.GetString("Urole") == "Admin";
+    var searchQuery = ViewData["SearchQuery"]?.ToString();
 }
 
 <div class="container mt-4">
 
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2 class="mb-0">Category List</h2>
-        <a asp-action="create" class="btn btn-primary shadow-sm">
-            + Create New Category
-        </a>
+    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+        <div>
+            <h2 class="mb-0">Category List</h2>
+            @if (!string.IsNullOrWhiteSpace(searchQuery))
+            {
+                <div class="text-muted small mt-1">Showing results for "<strong>@searchQuery</strong>"</div>
+            }
+        </div>
+        <div class="d-flex flex-wrap gap-2 align-items-center">
+            <form class="d-flex gap-2" method="get" asp-action="Index" role="search">
+                <input class="form-control" type="search" name="q" value="@searchQuery" placeholder="Search categories" aria-label="Search categories" />
+                <button class="btn btn-outline-primary" type="submit">Search</button>
+                @if (!string.IsNullOrWhiteSpace(searchQuery))
+                {
+                    <a class="btn btn-outline-secondary" asp-action="Index">Clear</a>
+                }
+            </form>
+            @if (isAdmin)
+            {
+                <a asp-action="create" class="btn btn-primary shadow-sm">
+                    + Create New Category
+                </a>
+            }
+        </div>
     </div>
 
 
@@ -34,9 +56,12 @@
                             <td class="align-middle fw-bold">@item.Name</td>
                             <td class="align-middle">@item.Describe</td>
                             <td class="text-center align-middle">
-                                <a asp-action="update" asp-route-id="@item.CategoryId" class="btn btn-sm btn-outline-warning">Edit</a>
                                 <a asp-action="details" asp-route-id="@item.CategoryId" class="btn btn-sm btn-outline-info">Details</a>
-                                <a asp-action="delete" asp-route-id="@item.CategoryId" class="btn btn-sm btn-outline-danger">Delete</a>
+                                @if (isAdmin)
+                                {
+                                    <a asp-action="update" asp-route-id="@item.CategoryId" class="btn btn-sm btn-outline-warning">Edit</a>
+                                    <a asp-action="delete" asp-route-id="@item.CategoryId" class="btn btn-sm btn-outline-danger">Delete</a>
+                                }
                             </td>
                         </tr>
                     }

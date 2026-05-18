@@ -1,0 +1,72 @@
+@{
+    ViewData["Title"] = "Forgot Password";
+    Layout = "_AuthLayout";
+}
+
+<style>
+    .auth-card {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    }
+</style>
+
+<div class="row justify-content-center">
+    <div class="col-md-4">
+        <div class="card auth-card shadow-lg">
+            <div class="card-body p-5">
+                <h3 class="text-center mb-4 text-primary fw-bold">Forgot Password?</h3>
+
+                <form asp-action="Reset" method="post">
+                    @if (ViewBag.Message != null)
+                    {
+                        <div class="alert alert-info alert-dismissible fade show" role="alert">
+                            @ViewBag.Message
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    }
+
+                    @if (ViewBag.Error != null)
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            @ViewBag.Error
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    }
+
+                    <div class="form-group mb-4">
+                        <label for="email" class="form-label text-muted fw-bold">Email Address</label>
+                        <input type="email" id="email" name="email" class="form-control" placeholder="Enter your registered email" value="@ViewBag.Email" required />
+                    </div>
+
+                    <div class="form-group mb-4">
+                        <label for="newPassword" class="form-label text-muted fw-bold">New Password</label>
+                        <input type="password" id="newPassword" name="newPassword" class="form-control" placeholder="Enter new password" required />
+                    </div>
+
+                    <div class="form-group mb-4">
+                        <label for="confirmPassword" class="form-label text-muted fw-bold">Confirm Password</label>
+                        <input type="password" id="confirmPassword" name="confirmPassword" class="form-control" placeholder="Confirm new password" required />
+                    </div>
+
+                    <div class="form-group mb-4">
+                        <label for="interestedOn" class="form-label text-muted fw-bold">Interested On</label>
+                        <input type="text" id="interestedOn" name="interestedOn" class="form-control" placeholder="Enter what you are interested in" value="@ViewBag.InterestedOn" required />
+                    </div>
+
+                    <p class="text-muted small mb-4">
+                        Please provide the information to verify your identity.
+                    </p>
+
+                    <div class="d-grid mb-3">
+                        <button type="submit" class="btn btn-primary fw-bold">Reset Password</button>
+                    </div>
+
+                    <div class="text-center">
+                        <a asp-controller="Login" asp-action="Index" class="text-decoration-none text-primary fw-bold">Back to Login</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

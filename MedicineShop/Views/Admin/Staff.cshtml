@@ -1,0 +1,55 @@
+@using System.Linq
+@model List<BLL.DTOs.UserDTO>
+
+@{
+    ViewData["Title"] = "Staff Management";
+}
+
+<div class="container mt-4 mb-5">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
+        <div>
+            <h2 class="mb-0 text-primary">Staff Management</h2>
+            <div class="text-muted small mt-1">Admin can view, add, and delete staff accounts.</div>
+        </div>
+        <a asp-action="CreateStaff" class="btn btn-success shadow-sm">
+            <i class="bi bi-plus-circle"></i> Add Staff
+        </a>
+    </div>
+
+    <div class="table-responsive shadow-sm rounded bg-white">
+        <table class="table table-bordered table-striped table-hover mb-0 align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th style="width: 90px;">ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th class="text-center" style="width: 160px;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="text-muted">#@item.UserId</td>
+                            <td class="fw-bold">@item.Name</td>
+                            <td>@item.Email</td>
+                            <td><span class="badge bg-secondary">@item.Role</span></td>
+                            <td class="text-center">
+                                <a asp-action="DeleteStaff" asp-route-id="@item.UserId" class="btn btn-sm btn-outline-danger">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="5" class="text-center text-muted py-4">No staff accounts found.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

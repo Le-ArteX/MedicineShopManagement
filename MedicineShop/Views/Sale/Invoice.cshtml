@@ -1,0 +1,59 @@
+@model BLL.DTOs.SaleDTO
+
+@{
+    ViewData["Title"] = "Invoice";
+    var netAmount = Model.TotalAmount - Model.Discount;
+}
+
+<div class="container mt-4 mb-5">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
+        <div>
+            <h2 class="mb-0 text-success"><i class="bi bi-receipt"></i> Invoice</h2>
+            <div class="text-muted small mt-1">Invoice No: <strong>@Model.InvoiceNo</strong></div>
+        </div>
+        <div class="d-flex gap-2 flex-wrap">
+            <button class="btn btn-outline-secondary" onclick="window.print()">
+                <i class="bi bi-printer"></i> Print
+            </button>
+            <a asp-action="Index" class="btn btn-outline-primary">Back to List</a>
+            <a asp-action="Create" class="btn btn-primary">Create Another Sale</a>
+        </div>
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-success text-white d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <span class="fw-bold">Medicine Shop Invoice</span>
+            <span class="badge bg-light text-success">Sale ID: #@Model.SaleId</span>
+        </div>
+        <div class="card-body bg-white">
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <h6 class="text-muted text-uppercase">Invoice Info</h6>
+                    <dl class="row mb-0">
+                        <dt class="col-sm-5">Invoice No</dt>
+                        <dd class="col-sm-7 fw-bold">@Model.InvoiceNo</dd>
+
+                        <dt class="col-sm-5">Sale Date</dt>
+                        <dd class="col-sm-7">@Model.SaleDate.ToString("dd-MMM-yyyy")</dd>
+
+                        <dt class="col-sm-5">Customer ID</dt>
+                        <dd class="col-sm-7">@Model.CustomerId</dd>
+                    </dl>
+                </div>
+                <div class="col-md-6">
+                    <h6 class="text-muted text-uppercase">Amounts</h6>
+                    <dl class="row mb-0">
+                        <dt class="col-sm-5">Total Amount</dt>
+                        <dd class="col-sm-7 fw-bold text-success">৳@Model.TotalAmount.ToString("N2")</dd>
+
+                        <dt class="col-sm-5">Discount</dt>
+                        <dd class="col-sm-7">৳@Model.Discount.ToString("N2")</dd>
+
+                        <dt class="col-sm-5">Net Amount</dt>
+                        <dd class="col-sm-7 fw-bold text-primary fs-5">৳@netAmount.ToString("N2")</dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

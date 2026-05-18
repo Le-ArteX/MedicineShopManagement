@@ -4,7 +4,7 @@ using BLL.Services;
 
 namespace MedicineShop.Controllers
 {
-    public class ReportController : Controller
+    public class ReportController : AppController
     {
         private readonly ReportService _reportService;
 
@@ -15,6 +15,11 @@ namespace MedicineShop.Controllers
 
         public IActionResult Index()
         {
+            if (!IsAdmin)
+            {
+                return LoginRedirect();
+            }
+
             var reportDto = new ReportDTO
             {
                 DashboardSummary = _reportService.GetDashboardSummary(),

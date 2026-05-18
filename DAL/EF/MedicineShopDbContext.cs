@@ -34,6 +34,8 @@ public partial class MedicineShopDbContext : DbContext
 
     public virtual DbSet<Supplier> Suppliers { get; set; }
 
+    public virtual DbSet<User> Users { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder.UseSqlServer("Name=DbConn");
 
@@ -190,6 +192,28 @@ public partial class MedicineShopDbContext : DbContext
             entity.Property(e => e.Phone)
                 .HasMaxLength(250)
                 .IsUnicode(false);
+        });
+
+        modelBuilder.Entity<User>(entity =>
+        {
+            entity.ToTable("Users");
+            entity.Property(e => e.UserId).HasColumnName("User_id");
+            entity.Property(e => e.Email)
+                .HasMaxLength(250)
+                .IsUnicode(false);
+            entity.Property(e => e.Name)
+                .HasMaxLength(250)
+                .IsUnicode(false);
+            entity.Property(e => e.Password)
+                .HasMaxLength(250)
+                .IsUnicode(false);
+            entity.Property(e => e.Role)
+                .HasMaxLength(250)
+                .IsUnicode(false);
+            entity.Property(e => e.InterestedOn)
+                .HasMaxLength(250)
+                .IsUnicode(false)
+                .HasColumnName("InterestedOn");
         });
 
         OnModelCreatingPartial(modelBuilder);

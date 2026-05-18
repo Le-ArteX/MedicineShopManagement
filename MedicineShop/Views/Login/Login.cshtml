@@ -1,0 +1,69 @@
+@model BLL.DTOs.LoginDTO
+
+@{
+    ViewData["Title"] = "Login";
+    Layout = "_AuthLayout";
+}
+
+<style>
+    .auth-card {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    }
+</style>
+
+<div class="row justify-content-center">
+    <div class="col-md-4">
+        <div class="card auth-card shadow-lg">
+            <div class="card-body p-5">
+                <h3 class="text-center mb-4 text-primary fw-bold">Login</h3>
+
+                <form asp-action="Login" method="post">
+                    @if (TempData["SuccessMessage"] != null)
+                    {
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            @TempData["SuccessMessage"]
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    }
+
+                    <div class="form-group mb-3">
+                        <label asp-for="Email" class="form-label text-muted fw-bold">Email Address</label>
+                        <input asp-for="Email" class="form-control" placeholder="Enter email" required />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="Password" class="form-label text-muted fw-bold">Password</label>
+                        <input asp-for="Password" type="password" class="form-control" placeholder="Enter password" required />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="rememberMe" name="rememberMe" />
+                        <label class="form-check-label text-muted" for="rememberMe">
+                            Remember me
+                        </label>
+                        <a asp-controller="ForgotPassword" asp-action="Index" class="text-decoration-none text-primary fw-bold small float-end">Forgot Password?</a>
+                    </div>
+
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                    <div class="d-grid mb-3">
+                        <button type="submit" class="btn btn-primary fw-bold">Login</button>
+                    </div>
+
+                    <div class="text-center">
+                        <span class="text-muted">Don't have an account? </span>
+                        <a asp-controller="Register" asp-action="Register" class="text-decoration-none fw-bold text-primary">Register</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

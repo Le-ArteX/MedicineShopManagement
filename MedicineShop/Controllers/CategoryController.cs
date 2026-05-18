@@ -1,10 +1,11 @@
-﻿using BLL.DTOs;
+﻿using System.Linq;
+using BLL.DTOs;
 using BLL.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MedicineShop.Controllers
 {
-    public class CategoryController : Controller
+    public class CategoryController : AppController
     {
         private readonly CategoryService categoryService;
 
@@ -12,15 +13,35 @@ namespace MedicineShop.Controllers
         {
             this.categoryService = categoryService;
         }
-        public IActionResult Index()
+
+        public IActionResult Index(string q)
         {
+            if (!IsAdmin)
+            {
+                return LoginRedirect();
+            }
+
             var data = categoryService.GetAll();
+            if (!string.IsNullOrWhiteSpace(q))
+            {
+                data = data.Where(item =>
+                    (item.Name?.Contains(q, System.StringComparison.OrdinalIgnoreCase) ?? false) ||
+                    (item.Describe?.Contains(q, System.StringComparison.OrdinalIgnoreCase) ?? false) ||
+                    item.CategoryId.ToString().Contains(q, System.StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+
+            ViewData["SearchQuery"] = q;
             return View(data);
         }
 
         [HttpGet]
         public IActionResult create()
         {
+            if (!IsAdmin)
+            {
+                return LoginRedirect();
+            }
+
             ViewBag.Categories = categoryService.GetAll(); 
             return View(new CategoryDTO());
         }
@@ -28,6 +49,11 @@ namespace MedicineShop.Controllers
         [HttpPost]
         public IActionResult create(CategoryDTO c)
         {
+            if (!IsAdmin)
+            {
+                return LoginRedirect();
+            }
+
             if(ModelState.IsValid)
             {
                 var res = categoryService.Create(c);
@@ -43,6 +69,11 @@ namespace MedicineShop.Controllers
         [HttpGet]
         public IActionResult update(int id)
         {
+            if (!IsAdmin)
+            {
+                return LoginRedirect();
+            }
+
             var category = categoryService.Get(id);
             if (category == null)
             {
@@ -54,6 +85,11 @@ namespace MedicineShop.Controllers
         [HttpPost]
         public IActionResult update(CategoryDTO c)
         {
+            if (!IsAdmin)
+            {
+                return LoginRedirect();
+            }
+
             if (ModelState.IsValid) { 
 
                 var res = categoryService.Update(c);
@@ -72,6 +108,11 @@ namespace MedicineShop.Controllers
         [HttpGet]
         public IActionResult details(int id) 
         {
+            if (!IsAdmin)
+            {
+                return LoginRedirect();
+            }
+
             var category = categoryService.Get(id);
             if (category == null)
             {
@@ -84,6 +125,11 @@ namespace MedicineShop.Controllers
         [HttpGet]
         public IActionResult delete(int id)
         {
+            if (!IsAdmin)
+            {
+                return LoginRedirect();
+            }
+
             var category = categoryService.Get(id);
             if (category == null)
             {
@@ -96,6 +142,11 @@ namespace MedicineShop.Controllers
         [ActionName("delete")] 
         public IActionResult confirmDelete(int CategoryId)
         {
+            if (!IsAdmin)
+            {
+                return LoginRedirect();
+            }
+
             var res = categoryService.Delete(CategoryId);
             if (res)
             {

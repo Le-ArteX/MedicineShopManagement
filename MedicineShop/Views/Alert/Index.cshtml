@@ -1,0 +1,103 @@
+@using System.Linq
+@model BLL.DTOs.ReportDTO
+
+@{
+    ViewData["Title"] = "Alerts";
+}
+
+<div class="container mt-4 mb-5">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
+        <div>
+            <h2 class="mb-0 text-danger"><i class="bi bi-bell-fill"></i> Alerts</h2>
+            <div class="text-muted small mt-1">Low stock medicine warnings for Admin and Staff</div>
+        </div>
+        <div class="d-flex gap-2 flex-wrap">
+            <span class="badge bg-danger rounded-pill px-3 py-2">@Model.LowStockMedicines.Count Low stock items</span>
+            <span class="badge bg-secondary rounded-pill px-3 py-2">@Model.DashboardSummary.TotalMedicines Total medicines</span>
+        </div>
+    </div>
+
+    <div class="row g-3 mb-4">
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="text-muted small text-uppercase">Sales revenue</div>
+                    <div class="fs-4 fw-bold text-success">৳@Model.DashboardSummary.TotalSalesRevenue.ToString("N2")</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="text-muted small text-uppercase">Purchase cost</div>
+                    <div class="fs-4 fw-bold text-primary">৳@Model.DashboardSummary.TotalPurchaseCost.ToString("N2")</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="text-muted small text-uppercase">Needs attention</div>
+                    <div class="fs-4 fw-bold text-warning">@Model.DashboardSummary.LowStockMedicineCount items</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <h5 class="mb-0 text-danger"><i class="bi bi-exclamation-triangle-fill"></i> Low Stock Medicines</h5>
+            <span class="badge bg-danger rounded-pill">@Model.LowStockMedicines.Count Alerts</span>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover table-striped mb-0 align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Medicine ID</th>
+                            <th>Name</th>
+                            <th>Brand</th>
+                            <th class="text-center">Current Stock</th>
+                            <th class="text-center">Min Level</th>
+                            <th class="text-center">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.LowStockMedicines != null && Model.LowStockMedicines.Any())
+                        {
+                            foreach (var item in Model.LowStockMedicines)
+                            {
+                                <tr>
+                                    <td class="fw-bold">#@item.MedicineId</td>
+                                    <td>@item.Name</td>
+                                    <td class="text-muted">@item.Brand</td>
+                                    <td class="text-center text-danger fw-bold">@item.StockQuantity</td>
+                                    <td class="text-center">@item.MinStockLevel</td>
+                                    <td class="text-center">
+                                        @if (item.StockQuantity == 0)
+                                        {
+                                            <span class="badge bg-danger">Out of Stock</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-warning text-dark">Low Stock</span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="6" class="text-center py-5 text-success fw-bold">
+                                    <i class="bi bi-check-circle fs-2 d-block mb-2"></i>
+                                    No active alerts. All medicine stock levels are healthy.
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

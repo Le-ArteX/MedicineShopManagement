@@ -4,7 +4,7 @@ using BLL.Services;
 
 namespace MedicineShop.Controllers
 {
-    public class PurchaseItemController : Controller
+    public class PurchaseItemController : AppController
     {
         private readonly PurchaseItemService _purchaseItemService;
 
@@ -15,6 +15,11 @@ namespace MedicineShop.Controllers
 
         public IActionResult Index()
         {
+            if (!IsAdmin)
+            {
+                return LoginRedirect();
+            }
+
             var data = _purchaseItemService.Get();
             return View(data);
         }
@@ -22,12 +27,22 @@ namespace MedicineShop.Controllers
         [HttpGet]
         public IActionResult create()
         {
+            if (!IsAdmin)
+            {
+                return LoginRedirect();
+            }
+
             return View(new PurchaseItemDTO());
         }
 
         [HttpPost]
         public IActionResult create(PurchaseItemDTO p)
         {
+            if (!IsAdmin)
+            {
+                return LoginRedirect();
+            }
+
             if (ModelState.IsValid)
             {
                 var res = _purchaseItemService.Create(p);
@@ -43,6 +58,11 @@ namespace MedicineShop.Controllers
         [HttpGet]
         public IActionResult update(int id)
         {
+            if (!IsAdmin)
+            {
+                return LoginRedirect();
+            }
+
             var purchaseItem = _purchaseItemService.Get(id);
             if (purchaseItem == null)
             {
@@ -54,6 +74,11 @@ namespace MedicineShop.Controllers
         [HttpPost]
         public IActionResult update(PurchaseItemDTO p)
         {
+            if (!IsAdmin)
+            {
+                return LoginRedirect();
+            }
+
             if (ModelState.IsValid)
             {
                 var res = _purchaseItemService.Update(p);
@@ -69,6 +94,11 @@ namespace MedicineShop.Controllers
         [HttpGet]
         public IActionResult details(int id)
         {
+            if (!IsAdmin)
+            {
+                return LoginRedirect();
+            }
+
             var purchaseItem = _purchaseItemService.Get(id);
             if (purchaseItem == null)
             {
@@ -80,6 +110,11 @@ namespace MedicineShop.Controllers
         [HttpGet]
         public IActionResult delete(int id)
         {
+            if (!IsAdmin)
+            {
+                return LoginRedirect();
+            }
+
             var purchaseItem = _purchaseItemService.Get(id);
             if (purchaseItem == null)
             {
@@ -92,6 +127,11 @@ namespace MedicineShop.Controllers
         [ActionName("delete")]
         public IActionResult confirmDelete(int PurchaseItemId)
         {
+            if (!IsAdmin)
+            {
+                return LoginRedirect();
+            }
+
             var res = _purchaseItemService.Delete(PurchaseItemId);
             if (res)
             {

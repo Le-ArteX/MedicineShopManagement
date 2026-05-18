@@ -1,8 +1,446 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@using Microsoft.AspNetCore.Http
+@{
+    ViewData["Title"] = "Home - Medicine Shop";
+    var role = Context.Session.GetString("Urole");
+    var isAuthenticated = !string.IsNullOrEmpty(Context.Session.GetString("Uemail"));
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<style>
+    :root {
+        --primary-color: #2563eb;
+        --secondary-color: #1e40af;
+        --accent-color: #059669;
+        --light-bg: #f0f9ff;
+        --border-color: #e5e7eb;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: #1f2937;
+    }
+
+    .hero-banner {
+        background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+        color: white;
+        padding: 80px 40px;
+        min-height: 500px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-radius: 15px;
+        margin: 20px;
+        gap: 40px;
+    }
+
+    .hero-content {
+        flex: 1;
+    }
+
+    .hero-text h1 {
+        font-size: 3rem;
+        font-weight: 700;
+        margin-bottom: 15px;
+    }
+
+    .hero-text p {
+        font-size: 1.1rem;
+        margin-bottom: 25px;
+        opacity: 0.9;
+    }
+
+    .hero-buttons {
+        display: flex;
+        gap: 15px;
+    }
+
+    .hero-buttons .btn {
+        padding: 12px 25px;
+        font-size: 1rem;
+        font-weight: 600;
+        border-radius: 6px;
+        border: none;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+        transition: 0.3s;
+    }
+
+    .btn-primary-light {
+        background-color: white;
+        color: #2563eb;
+    }
+
+    .btn-primary-light:hover {
+        background-color: #f0f9ff;
+    }
+
+    .btn-outline-light {
+        background-color: transparent;
+        color: white;
+        border: 2px solid white;
+    }
+
+    .btn-outline-light:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .hero-image {
+        text-align: center;
+        font-size: 180px;
+    }
+
+    /* Stats Section */
+    .stats-container {
+        background: linear-gradient(135deg, var(--light-bg) 0%, white 100%);
+        padding: 60px 20px;
+        margin: -30px 0 60px 0;
+        border-radius: 20px;
+        position: relative;
+        z-index: 10;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    }
+
+    .stats-grid {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 30px;
+    }
+
+    .stat-card {
+        text-align: center;
+        padding: 30px;
+    }
+
+    .stat-number {
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: var(--primary-color);
+        margin-bottom: 10px;
+    }
+
+    .stat-label {
+        font-size: 1rem;
+        color: #6b7280;
+        font-weight: 500;
+    }
+
+    /* Features Section */
+    .features-section {
+        max-width: 1200px;
+        margin: 0 auto 80px;
+        padding: 0 20px;
+    }
+
+    .section-title {
+        font-size: 2.5rem;
+        font-weight: 800;
+        text-align: center;
+        margin-bottom: 50px;
+        color: #1f2937;
+    }
+
+    .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 30px;
+    }
+
+    .feature-card {
+        background: white;
+        border-radius: 15px;
+        padding: 40px 30px;
+        text-align: center;
+        border: 1px solid var(--border-color);
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    .feature-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 40px rgba(37, 99, 235, 0.1);
+        border-color: var(--primary-color);
+    }
+
+    .feature-icon {
+        font-size: 3rem;
+        margin-bottom: 20px;
+        display: inline-block;
+    }
+
+    .feature-card h5 {
+        font-size: 1.3rem;
+        font-weight: 700;
+        margin-bottom: 15px;
+        color: #1f2937;
+    }
+
+    .feature-card p {
+        color: #6b7280;
+        line-height: 1.6;
+        font-size: 0.95rem;
+    }
+
+    /* Services Section */
+    .services-section {
+        background: linear-gradient(135deg, #f3f4f6 0%, var(--light-bg) 100%);
+        padding: 80px 20px;
+        margin: 80px 0;
+        border-radius: 20px;
+    }
+
+    .services-grid {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 40px;
+    }
+
+    .service-item {
+        background: white;
+        padding: 40px 30px;
+        border-radius: 15px;
+        border-left: 5px solid var(--primary-color);
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    }
+
+    .service-item:hover {
+        transform: translateX(10px);
+        box-shadow: 0 10px 30px rgba(37, 99, 235, 0.15);
+    }
+
+    .service-icon {
+        font-size: 2.5rem;
+        margin-bottom: 15px;
+    }
+
+    .service-item h5 {
+        font-size: 1.2rem;
+        font-weight: 700;
+        margin-bottom: 15px;
+        color: #1f2937;
+    }
+
+    .service-item p {
+        color: #6b7280;
+        line-height: 1.6;
+    }
+
+    /* CTA Section */
+    .cta-section {
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+        color: white;
+        padding: 80px 20px;
+        text-align: center;
+        border-radius: 20px;
+        max-width: 1200px;
+        margin: 80px auto;
+    }
+
+    .cta-section h2 {
+        font-size: 2.5rem;
+        font-weight: 800;
+        margin-bottom: 20px;
+    }
+
+    .cta-section p {
+        font-size: 1.1rem;
+        margin-bottom: 40px;
+        opacity: 0.95;
+    }
+
+    .cta-buttons {
+        display: flex;
+        gap: 20px;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    @@media (max-width: 768px) {
+        .hero-banner {
+            flex-direction: column;
+            padding: 50px 20px;
+            text-align: center;
+        }
+
+        .hero-text h1 {
+            font-size: 2rem;
+        }
+
+        .hero-buttons {
+            flex-direction: column;
+            width: 100%;
+        }
+
+        .hero-buttons .btn {
+            width: 100%;
+        }
+
+        .hero-image {
+            font-size: 120px;
+        }
+
+        .hero-content {
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+
+        .section-title {
+            font-size: 2rem;
+        }
+
+        .cta-buttons {
+            flex-direction: column;
+        }
+
+        .btn {
+            width: 100%;
+        }
+    }
+</style>
+
+<!-- Hero Banner -->
+<section class="hero-banner">
+    <div class="hero-content">
+        <h1>Medicine Shop Management</h1>
+        <p>Streamline your pharmacy operations with our comprehensive inventory and sales management system</p>
+        <div class="hero-buttons">
+            @if (!isAuthenticated)
+            {
+                <a href="@Url.Action("Login", "Login")" class="btn btn-primary-light">Login to System</a>
+                <a href="@Url.Action("Register", "Register")" class="btn btn-outline-light">Create Account</a>
+            }
+            else if (role == "Staff")
+            {
+                <a href="@Url.Action("Create", "Sale")" class="btn btn-primary-light">Create Sale</a>
+                <a href="@Url.Action("Index", "Sale")" class="btn btn-outline-light">View Invoices</a>
+            }
+            else if (role == "Admin")
+            {
+                <a href="@Url.Action("Index", "Admin")" class="btn btn-primary-light">Dashboard</a>
+                <a href="@Url.Action("Index", "Medicine")" class="btn btn-outline-light">Medicines</a>
+            }
+        </div>
+    </div>
+    <div class="hero-image">💊</div>
+</section>
+
+<!-- Stats Section -->
+<div class="stats-container">
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-number">10K+</div>
+            <div class="stat-label">Medicines Available</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">500+</div>
+            <div class="stat-label">Active Users</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">99.9%</div>
+            <div class="stat-label">System Uptime</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">24/7</div>
+            <div class="stat-label">Support Available</div>
+        </div>
+    </div>
 </div>
+
+<!-- Features Section -->
+<section class="features-section">
+    <h2 class="section-title">Why Choose Medicine Shop?</h2>
+    <div class="features-grid">
+        <div class="feature-card">
+            <div class="feature-icon">✓</div>
+            <h5>Quality Guaranteed</h5>
+            <p>Verified and genuine pharmaceutical products with complete authenticity certification</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">⚡</div>
+            <h5>Lightning Fast</h5>
+            <p>Optimized system for quick transactions and instant inventory updates</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">🛡️</div>
+            <h5>Secure & Reliable</h5>
+            <p>Enterprise-grade security with data encryption and regular backups</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">📊</div>
+            <h5>Smart Analytics</h5>
+            <p>Advanced reporting and analytics to track performance and trends</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">👥</div>
+            <h5>Easy Management</h5>
+            <p>Intuitive interface designed for pharmacy staff and administrators</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">🎯</div>
+            <h5>Budget Friendly</h5>
+            <p>Scalable pricing plans that fit your pharmacy size and needs</p>
+        </div>
+    </div>
+</section>
+
+<!-- Services Section -->
+<section class="services-section">
+    <div class="container-fluid">
+        <h2 class="section-title">Our Services</h2>
+        <div class="services-grid">
+            <div class="service-item">
+                <div class="service-icon">🏥</div>
+                <h5>Medicine Sales</h5>
+                <p>Complete point-of-sale system with barcode scanning, discounts, and invoice generation for seamless transactions</p>
+            </div>
+            <div class="service-item">
+                <div class="service-icon">📦</div>
+                <h5>Inventory Management</h5>
+                <p>Real-time stock tracking, automatic alerts for low inventory, and purchase order management</p>
+            </div>
+            <div class="service-item">
+                <div class="service-icon">👨‍💼</div>
+                <h5>Staff Management</h5>
+                <p>User roles and permissions, employee tracking, and activity logging for accountability</p>
+            </div>
+            <div class="service-item">
+                <div class="service-icon">📈</div>
+                <h5>Detailed Reports</h5>
+                <p>Comprehensive sales reports, revenue analysis, and performance metrics at a glance</p>
+            </div>
+            <div class="service-item">
+                <div class="service-icon">💼</div>
+                <h5>Supplier Management</h5>
+                <p>Manage supplier information, track purchases, and maintain supplier relationships</p>
+            </div>
+            <div class="service-item">
+                <div class="service-icon">⚠️</div>
+                <h5>Low Stock Alerts</h5>
+                <p>Automated notifications for medicines below minimum stock levels to prevent stockouts</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+@if (!isAuthenticated)
+{
+    <section class="cta-section">
+        <h2>Ready to Optimize Your Pharmacy?</h2>
+        <p>Join Medicine Shop and experience the future of pharmacy management</p>
+        <div class="cta-buttons">
+            <a href="@Url.Action("Register", "Register")" class="btn btn-primary-light">Sign Up Now</a>
+            <a href="@Url.Action("Login", "Login")" class="btn btn-outline-light">Sign In</a>
+        </div>
+    </section>
+}

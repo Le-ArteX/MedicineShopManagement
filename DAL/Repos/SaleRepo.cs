@@ -42,6 +42,11 @@ namespace DAL.Repos
             return db.Sales.Find(id);
         }
 
+        public Sale GetByInvoiceNo(string invoiceNo)
+        {
+            return db.Sales.FirstOrDefault(s => s.InvoiceNo == invoiceNo);
+        }
+
         public bool Update(Sale obj)
         {
             var ex = Get(obj.SaleId);

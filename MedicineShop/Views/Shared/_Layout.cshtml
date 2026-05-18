@@ -1,79 +1,81 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Http
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - MedicineShop</title>
-    <script type="importmap"></script>
+    <title>@ViewData["Title"] - Medicine Shop</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/MedicineShop.styles.css" asp-append-version="true" />
 </head>
 <body>
+    @{
+        var role = Context.Session.GetString("Urole");
+        var isAuthenticated = !string.IsNullOrEmpty(Context.Session.GetString("Uemail"));
+        var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+        var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
+        string Active(string controller, string? action = null) =>
+            currentController == controller && (action == null || currentAction == action) ? "active fw-bold text-primary" : "text-dark";
+    }
+
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">MedicineShop</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+            <div class="container-fluid px-3 px-lg-4">
+                <a class="navbar-brand fw-bold text-primary" asp-controller="Home" asp-action="Index">MedicineShop</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
+
+                <div class="collapse navbar-collapse" id="mainNavbar">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 flex-wrap gap-1 gap-lg-2">
+                        @if (role == "Admin")
+                        {
+                            <li class="nav-item"><a class="nav-link @Active("Medicine")" asp-controller="Medicine" asp-action="Index">Medicine</a></li>
+                            <li class="nav-item"><a class="nav-link @Active("Category")" asp-controller="Category" asp-action="Index">Category</a></li>
+                            <li class="nav-item"><a class="nav-link @Active("Sale")" asp-controller="Sale" asp-action="Index">Sales</a></li>
+                            <li class="nav-item"><a class="nav-link @Active("Purchase")" asp-controller="Purchase" asp-action="Index">Purchase</a></li>
+                            <li class="nav-item"><a class="nav-link @Active("Supplier")" asp-controller="Supplier" asp-action="Index">Supplier</a></li>
+                            <li class="nav-item"><a class="nav-link @Active("Customer")" asp-controller="Customer" asp-action="Index">Customer</a></li>
+                            <li class="nav-item"><a class="nav-link @Active("Admin", "Staff")" asp-controller="Admin" asp-action="Staff">Staff</a></li>
+                            <li class="nav-item"><a class="nav-link @Active("Report")" asp-controller="Report" asp-action="Index">Reports</a></li>
+                            <li class="nav-item"><a class="nav-link @Active("Alert")" asp-controller="Alert" asp-action="Index">Alerts</a></li>
+                        }
+                        else if (role == "Staff")
+                        {
+                            <li class="nav-item"><a class="nav-link @Active("Medicine")" asp-controller="Medicine" asp-action="Index">Medicine</a></li>
+                            <li class="nav-item"><a class="nav-link @Active("Sale", "Create")" asp-controller="Sale" asp-action="Create">Sale</a></li>
+                            <li class="nav-item"><a class="nav-link @Active("Sale", "Index")" asp-controller="Sale" asp-action="Index">Invoice</a></li>
+                            <li class="nav-item"><a class="nav-link @Active("Customer")" asp-controller="Customer" asp-action="Index">Customer</a></li>
+                            <li class="nav-item"><a class="nav-link @Active("Alert")" asp-controller="Alert" asp-action="Index">Alerts</a></li>
+                        }
+                    </ul>
+
+                    <ul class="navbar-nav ms-lg-auto align-items-lg-center gap-1 gap-lg-2">
+                        @if (!isAuthenticated)
+                        {
+                            <li class="nav-item"><a class="nav-link text-dark" asp-controller="Login" asp-action="Index">Login</a></li>
+                            <li class="nav-item"><a class="nav-link text-dark" asp-controller="Register" asp-action="Register">Register</a></li>
+                        }
+                        else
+                        {
+                            <li class="nav-item"><a class="nav-link text-dark fw-bold" asp-controller="Login" asp-action="Logout">Logout</a></li>
+                        }
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
+
+    <div class="container-fluid">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted mt-5">
-        <div class="container">
-            &copy; 2026 - MedicineShop - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
-
-
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-
-    
-    @if (TempData["SuccessMessage"] != null)
-    {
-        <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1055;">
-            <div id="successToast" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
-                <div class="d-flex">
-                    <div class="toast-body">
-                        <strong>Success!</strong> @TempData["SuccessMessage"]
-                    </div>
-                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-                </div>
-            </div>
-        </div>
-
-        <!-- 3. SCRIPT TO SHOW THE TOAST -->
-        <script>
-            document.addEventListener("DOMContentLoaded", function() {
-                var toastEl = document.getElementById('successToast');
-                if (toastEl) {
-                    var toast = new bootstrap.Toast(toastEl, { delay: 3000 }); // disappears in 3 seconds
-                    toast.show();
-                }
-            });
-        </script>
-    }
-
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

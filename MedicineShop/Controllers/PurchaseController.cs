@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Linq;
+using Microsoft.AspNetCore.Mvc;
 using BLL.DTOs;
 using BLL.Services;
 
 namespace MedicineShop.Controllers
 {
-    public class PurchaseController : Controller
+    public class PurchaseController : AppController
     {
         private readonly PurchaseService _purchaseService;
 
@@ -13,21 +14,47 @@ namespace MedicineShop.Controllers
             _purchaseService = purchaseService;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string q)
         {
+            if (!IsAdmin)
+            {
+                return LoginRedirect();
+            }
+
             var data = _purchaseService.Get();
+            if (!string.IsNullOrWhiteSpace(q))
+            {
+                data = data.Where(item =>
+                    (item.InvoiceNo?.Contains(q, System.StringComparison.OrdinalIgnoreCase) ?? false) ||
+                    item.SupplierId.ToString().Contains(q, System.StringComparison.OrdinalIgnoreCase) ||
+                    item.PurchaseId.ToString().Contains(q, System.StringComparison.OrdinalIgnoreCase) ||
+                    item.PurchaseDate.ToString("dd-MMM-yyyy").Contains(q, System.StringComparison.OrdinalIgnoreCase) ||
+                    item.TotalAmount.ToString().Contains(q, System.StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+
+            ViewData["SearchQuery"] = q;
             return View(data);
         }
 
         [HttpGet]
         public IActionResult create()
         {
+            if (!IsAdmin)
+            {
+                return LoginRedirect();
+            }
+
             return View(new PurchaseDTO());
         }
 
         [HttpPost]
         public IActionResult create(PurchaseDTO p)
         {
+            if (!IsAdmin)
+            {
+                return LoginRedirect();
+            }
+
             if (ModelState.IsValid)
             {
                 var res = _purchaseService.Create(p);
@@ -43,6 +70,11 @@ namespace MedicineShop.Controllers
         [HttpGet]
         public IActionResult update(int id)
         {
+            if (!IsAdmin)
+            {
+                return LoginRedirect();
+            }
+
             var purchase = _purchaseService.Get(id);
             if (purchase == null)
             {
@@ -54,6 +86,11 @@ namespace MedicineShop.Controllers
         [HttpPost]
         public IActionResult update(PurchaseDTO p)
         {
+            if (!IsAdmin)
+            {
+                return LoginRedirect();
+            }
+
             if (ModelState.IsValid)
             {
                 var res = _purchaseService.Update(p);
@@ -69,6 +106,11 @@ namespace MedicineShop.Controllers
         [HttpGet]
         public IActionResult details(int id)
         {
+            if (!IsAdmin)
+            {
+                return LoginRedirect();
+            }
+
             var purchase = _purchaseService.Get(id);
             if (purchase == null)
             {
@@ -80,6 +122,11 @@ namespace MedicineShop.Controllers
         [HttpGet]
         public IActionResult delete(int id)
         {
+            if (!IsAdmin)
+            {
+                return LoginRedirect();
+            }
+
             var purchase = _purchaseService.Get(id);
             if (purchase == null)
             {
@@ -92,6 +139,11 @@ namespace MedicineShop.Controllers
         [ActionName("delete")]
         public IActionResult confirmDelete(int PurchaseId)
         {
+            if (!IsAdmin)
+            {
+                return LoginRedirect();
+            }
+
             var res = _purchaseService.Delete(PurchaseId);
             if (res)
             {

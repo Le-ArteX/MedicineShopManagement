@@ -1,5 +1,44 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model BLL.DTOs.CustomerDTO
+
 @{
+    ViewData["Title"] = "Update Customer";
 }
+
+<div class="container mt-4 mb-5">
+    <h2><i class="bi bi-pencil-square text-warning"></i> Update Customer</h2>
+    <hr />
+
+    <div class="card shadow-sm p-4 col-md-8 mx-auto bg-light">
+        <form asp-action="update" method="post">
+            <input asp-for="CustomerId" type="hidden" />
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="Name" class="form-label fw-bold">Name</label>
+                    <input asp-for="Name" class="form-control" />
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label asp-for="Phone" class="form-label fw-bold">Phone</label>
+                    <input asp-for="Phone" class="form-control" />
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="Email" class="form-label fw-bold">Email</label>
+                    <input asp-for="Email" type="email" class="form-control" />
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label asp-for="Address" class="form-label fw-bold">Address</label>
+                    <input asp-for="Address" class="form-control" />
+                </div>
+            </div>
+
+            <div class="text-end mt-4">
+                <a asp-action="Index" class="btn btn-secondary me-2">Cancel</a>
+                <button type="submit" class="btn btn-warning px-4 text-dark fw-bold"><i class="bi bi-save"></i> Update Customer</button>
+            </div>
+        </form>
+    </div>
+</div>

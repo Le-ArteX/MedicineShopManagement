@@ -1,0 +1,75 @@
+@using System.Linq
+@model List<BLL.DTOs.SaleDTO>
+
+@{
+    ViewData["Title"] = "Invoices";
+    var searchQuery = ViewData["SearchQuery"]?.ToString();
+}
+
+<div class="container mt-4 mb-5">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
+        <div>
+            <h2 class="mb-0 text-primary">Sales / Invoices</h2>
+            @if (!string.IsNullOrWhiteSpace(searchQuery))
+            {
+                <div class="text-muted small mt-1">Showing results for "<strong>@searchQuery</strong>"</div>
+            }
+        </div>
+
+        <div class="d-flex flex-wrap gap-2 align-items-center">
+            <form class="d-flex gap-2" method="get" asp-action="Index" role="search">
+                <input class="form-control" type="search" name="q" value="@searchQuery" placeholder="Search invoices" aria-label="Search invoices" />
+                <button class="btn btn-outline-primary" type="submit">Search</button>
+                @if (!string.IsNullOrWhiteSpace(searchQuery))
+                {
+                    <a class="btn btn-outline-secondary" asp-action="Index">Clear</a>
+                }
+            </form>
+            <a asp-action="Create" class="btn btn-primary shadow-sm">
+                <i class="bi bi-plus-circle"></i> Create Sale
+            </a>
+        </div>
+    </div>
+
+    <div class="table-responsive shadow-sm rounded bg-white">
+        <table class="table table-bordered table-striped table-hover mb-0 align-middle">
+            <thead class="table-light text-center">
+                <tr>
+                    <th>Invoice No</th>
+                    <th>Sale Date</th>
+                    <th>Customer ID</th>
+                    <th>Total Amount</th>
+                    <th>Discount</th>
+                    <th>Net Amount</th>
+                    <th style="width: 220px;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="fw-bold">@item.InvoiceNo</td>
+                            <td>@item.SaleDate.ToString("dd-MMM-yyyy")</td>
+                            <td class="text-center">@item.CustomerId</td>
+                            <td class="text-end text-success fw-bold">৳@item.TotalAmount.ToString("N2")</td>
+                            <td class="text-end">৳@item.Discount.ToString("N2")</td>
+                            <td class="text-end fw-bold">৳@(item.TotalAmount - item.Discount)</td>
+                            <td class="text-center">
+                                <a asp-action="Invoice" asp-route-invoiceNo="@item.InvoiceNo" class="btn btn-sm btn-outline-info">Invoice</a>
+                                <a asp-action="Details" asp-route-id="@item.SaleId" class="btn btn-sm btn-outline-secondary">Details</a>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="7" class="text-center text-muted py-4">No sales found.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
