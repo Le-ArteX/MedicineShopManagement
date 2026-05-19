@@ -66,23 +66,21 @@
         <div class="col-md-6 mb-4">
             <div class="card border-0 shadow-sm">
                 <div class="card-header bg-brown fw-bold">Low stock medicines</div>
-                <div class="card-body p-0">
-                    <ul class="list-group list-group-flush">
-                        @* @if (Model.LowStockMedicines.Any())
-                        {
-                            foreach (var med in Model.LowStockMedicines)
-                            {
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    @med.Name
-                                    <span>— @med.StockQuantity left <span class="badge bg-danger rounded-pill">[LOW]</span></span>
-                                </li>
-                            }
-                        } *@
-                        else
-                        {
-                            <li class="list-group-item text-muted">Stock levels are healthy.</li>
-                        }
-                    </ul>
+                <div class="card-body">
+                    @if (Model.ActiveAlertsCount > 0)
+                    {
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div>
+                                <strong>@Model.ActiveAlertsCount</strong> medicines are below the stock threshold.
+                                <div class="text-muted small mt-1">Open Alerts to review them.</div>
+                            </div>
+                            <a asp-controller="Alert" asp-action="Index" class="btn btn-sm btn-outline-primary">View Alerts</a>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-muted">Stock levels are healthy.</div>
+                    }
                 </div>
             </div>
         </div>
@@ -90,19 +88,14 @@
         <div class="col-md-6 mb-4">
             <div class="card border-0 shadow-sm">
                 <div class="card-header bg-brown fw-bold">System alerts</div>
-                <div class="card-body p-2">
-                    @* @if (Model.SystemAlerts.Any())
+                <div class="card-body">
+                    @if (Model.ActiveAlertsCount > 0)
                     {
-                        foreach (var alert in Model.SystemAlerts)
-                        {
-                            <p class="text-danger mb-1 border-bottom pb-1">
-                                [RED] @alert.Message — @alert.CreatedAt.ToString("MMM dd HH:mm")
-                            </p>
-                        }
-                    } *@
+                        <p class="mb-0 text-danger">You have @Model.ActiveAlertsCount active system alert(s).</p>
+                    }
                     else
                     {
-                        <p class="text-muted mb-1">No active system alerts.</p>
+                        <p class="text-muted mb-0">No active system alerts.</p>
                     }
                 </div>
             </div>
@@ -111,19 +104,28 @@
         <div class="col-md-6 mb-4">
             <div class="card border-0 shadow-sm">
                 <div class="card-header bg-success text-white fw-bold">Recent sales (all staff)</div>
-                <div class="card-body p-2">
-                    @* @if (Model.RecentSales.Any())
+                <div class="card-body p-0">
+                    @if (Model.RecentSales != null && Model.RecentSales.Any())
                     {
-                        foreach (var sale in Model.RecentSales)
-                        {
-                            <div class="border-bottom py-2">
-                                @sale.InvoiceNumber | @(sale.Customer?.Name ?? "Walk-in") | @sale.TotalAmount.ToString("N0") BDT
-                            </div>
-                        }
-                    } *@
+                        <ul class="list-group list-group-flush">
+                            @foreach (var sale in Model.RecentSales)
+                            {
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <strong>@sale.InvoiceNo</strong>
+                                        <div class="text-muted small">@sale.SaleDate.ToString("dd-MMM-yyyy")</div>
+                                    </div>
+                                    <div class="text-end">
+                                        <div>@(sale.CustomerId)</div>
+                                        <div class="fw-bold">@sale.TotalAmount.ToString("N0") BDT</div>
+                                    </div>
+                                </li>
+                            }
+                        </ul>
+                    }
                     else
                     {
-                        <div class="py-2 text-muted">No recent sales found.</div>
+                        <div class="p-3 text-muted">No recent sales found.</div>
                     }
                 </div>
             </div>

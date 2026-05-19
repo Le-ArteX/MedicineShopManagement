@@ -61,7 +61,7 @@
                             <td class="align-middle fw-bold text-primary">@item.Name</td>
                             <td class="align-middle">@item.GenericName</td>
                             <td class="align-middle">@item.Brand</td>
-                            <td class="align-middle text-success fw-bold text-end">@item.UnitPrice.ToString("C")</td>
+                            <td class="align-middle text-success fw-bold text-end">৳@item.UnitPrice.ToString("N2")</td>
 
                             <td class="align-middle text-center fw-bold @((item.StockQuantity <= item.MinStockLevel) ? "text-danger" : "")">
                                 @item.StockQuantity
